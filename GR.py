@@ -44,18 +44,9 @@ ax.scatter(mag, ac_frec, label = "Acumulativo")
 ###############################  Normal ###########################
           
 ax.scatter(mag, frec,label="Frecuencias")
+ax.scatter(1.8, 70000, c= "b", label="Mc") 
+ax.plot(mag[18:],10**(6.028801 -  0.594731*mag[18:]), c = "purple", label="G-L") 
 plt.legend(loc="best")
 plt.show()
-          
-##################### Ley de Gutenberg-Ritcher ####################
-
-# En primer lugar, debe calcularse la magnitud de completitud.
-
-def MC(catalogo):
-    return Mc
-+++++
-
-def GR(catalogo):
-    a =1; b= 2;
-    return a, b
+        
 
