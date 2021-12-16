@@ -1,6 +1,4 @@
-import pandas as pd
 import numpy as np
-import math
 
 # Bootstrapping para el cálculo de Mc y b, con sus respectivos errores.
 
@@ -39,7 +37,8 @@ def magcomp(cat, res, corr):
         if hist[j] == maxcount:       
             cMc = bins_ed[j]
             # Si se quiere mantener el primer valor de magnitud en el caso
-            # de que coincidan, descomentar el break que hay debajo.
+            # de que coincidan varias frecuencias máximas,
+            # descomentar el break que hay debajo.
             # break;
     return cMc
 
@@ -64,7 +63,7 @@ def b_param(cat, mc):
     meanMag = np.mean(cat)      # Cálculo de la magnitud promedio.
     n = len(cat)                # Tamaño del catálogo.
     
-    # Cálculo de b usando la expresión del método: 
+    # Cálculo de b usando la expresión del método de máxima verosimilitud: 
     b = (np.log10(np.exp(1)))/(meanMag + binning*0.5 - minMag)
     # En caso de que se quiera un valor de b constante, descomentar linea siguiente:
     # b = 1.0
@@ -72,9 +71,9 @@ def b_param(cat, mc):
     # Cálculo de la desviación estándar.
     magminprom = cat-np.ones(len(cat))*meanMag      # Catálogo menos promedio de magnitud.
     bVar = np.var(magminprom)/n                     # Varianza de b/n.
-    bstdev = 2.30*np.sqrt(bVar)*b** 2              # Desviación estándar.
+    bstdev = 2.30*np.sqrt(bVar)*b** 2               # Desviación estándar.
     a = np.log10(n) + b*minMag                      # a usando la ley de G-R.
-    
+    # En la expresión anterior podría usarse mc si se quiere en vez de minMag.
     return  a, b, bstdev
 
 
@@ -135,5 +134,9 @@ cat = np.loadtxt("Catálogo_españa_matlab.txt", delimiter=",", skiprows = 1, dt
 
 b, berr, a, aerr, mc, mcerr, b_l, mC_l = Bootstrap(cat, 20, 10000, 0, 0.1, 0)
 
-print("La ley de Gutenberg-Richter para el catálogo es: log(N) = {:f} + {:f}M".format(a, b))
+print("La ley de Gutenberg-Richter para el catálogo es: log(N) = {:f} - {:f}M".format(a, b))
 print("La magnitud de completidud es :", mc)
+
+if __name__ == "__Bootstrap__":
+    main(sys.argv[0], sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+
